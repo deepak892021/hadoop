@@ -59,3 +59,41 @@ in step 6 in the hdfs directory /tmp/hdfsusecases/NYSE_2020_06.txt
 Ans:
 hadoop fs -appendToFile /home/hduser/install/hdfsusecases/NYSE_2020_06_21.txt /tmp/hdfsusecases/NYSE_2020_06.txt
 
+
+9. Count the size of the file in HDFS /tmp/hdfsusecases/NYSE_2020_06.txt
+
+Ans:
+[hduser@localhost hdfsusecases]$ hadoop fsck /tmp/hdfsusecases/NYSE_2020_06.txt
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+
+22/06/29 20:19:38 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Connecting to namenode via http://localhost:50070/fsck?ugi=hduser&path=%2Ftmp%2Fhdfsusecases%2FNYSE_2020_06.txt
+FSCK started by hduser (auth:SIMPLE) from /127.0.0.1 for path /tmp/hdfsusecases/NYSE_2020_06.txt at Wed Jun 29 20:19:41 IST 2022
+.Status: HEALTHY
+ Total size:	176250 B
+ Total dirs:	0
+ Total files:	1
+ Total symlinks:		0
+ Total blocks (validated):	1 (avg. block size 176250 B)
+ Minimally replicated blocks:	1 (100.0 %)
+ Over-replicated blocks:	0 (0.0 %)
+ Under-replicated blocks:	0 (0.0 %)
+ Mis-replicated blocks:		0 (0.0 %)
+ Default replication factor:	1
+ Average block replication:	1.0
+ Corrupt blocks:		0
+ Missing replicas:		0 (0.0 %)
+ Number of data-nodes:		1
+ Number of racks:		1
+FSCK ended at Wed Jun 29 20:19:41 IST 2022 in 5 milliseconds
+
+
+The filesystem under path '/tmp/hdfsusecases/NYSE_2020_06.txt' is HEALTHY
+
+
+
+10. Count the number of rows are there in the /tmp/hdfsusecases/NYSE_2020_06.txt (Which should show the total
+count of the files created in step1 and 2)
+
+
