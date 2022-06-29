@@ -92,8 +92,13 @@ FSCK ended at Wed Jun 29 20:19:41 IST 2022 in 5 milliseconds
 The filesystem under path '/tmp/hdfsusecases/NYSE_2020_06.txt' is HEALTHY
 
 
-
 10. Count the number of rows are there in the /tmp/hdfsusecases/NYSE_2020_06.txt (Which should show the total
 count of the files created in step1 and 2)
+
+Ans:
+
+[hduser@localhost hdfsusecases]$ hadoop fs -cat /tmp/hdfsusecases/NYSE_2020_06.txt | wc -l
+22/06/29 20:34:21 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2000
 
 
