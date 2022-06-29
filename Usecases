@@ -12,3 +12,50 @@ the line from 1001 to 2000 from an existing file ~/pigdata/NYSE_daily
 
 Ans : 
 sed -n '1001,2000p' ~/hive/data/txns_20181213_NY > ~/install/hdfsusecases/NYSE_2020_06_21.txt
+
+
+3. Create a directory in Hadoop namely /tmp/hdfsusecases
+
+Ans :
+hadoop fs -mkdir -p /tmp/hdfsusecases
+
+
+4. Check whether the above directory is created in HDFS or not using the below command (Note: We use –test –d
+option to check whether the given path is a directory or not)
+hadoop fs -test -d /tmp/hdfsusecases
+
+Ans:
+hadoop fs -test -d /tmp/hdfsusecases
+
+
+5. Check what is the status code of the above command using, if it shows 0 then directory is created, if shows non
+zero then the directory is not created then check the step 3 again.
+echo $?
+
+Ans:
+echo $?  ---> 0
+
+
+
+6. Copy file generated only in step 1 (~/install/hdfsusecases/NYSE_2020_06_20.txt) from linux to hdfs directory
+/tmp/hdfsusecases in the name of NYSE_2020_06.txt
+
+Ans:
+hadoop dfs -copyFromLocal /home/hduser/install/hdfsusecases/NYSE_2020_06_20.txt /tmp/hdfsusecases/NYSE_2020_06.txt
+
+
+7. Like step 4 and 5, check whether the above file (/tmp/hdfsusecases/NYSE_2020_06.txt) is created or not in HDFS,
+using -f option and check for the status code using $? and create a zero byte file in HDFS directory
+/tmp/hdfsusecases in the name of _SUCCESS
+
+Ans:
+hadoop fs -test -d /tmp/hdfsusecases
+echo $?
+
+
+8. Append the file generated in step 2 in linux (~/install/hdfsusecases/NYSE_2020_06_20.txt) with the file generated
+in step 6 in the hdfs directory /tmp/hdfsusecases/NYSE_2020_06.txt
+
+Ans:
+hadoop fs -appendToFile /home/hduser/install/hdfsusecases/NYSE_2020_06_21.txt /tmp/hdfsusecases/NYSE_2020_06.txt
+
