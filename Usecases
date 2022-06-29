@@ -1,0 +1,14 @@
+1. Create a new directory in linux namely ~/install/hdfsusecases and create a new file inside the above directory
+namely ~/install/hdfsusecases/NYSE_2020_06_20.txt copying the first 1000 lines from an existing file
+~/pigdata/NYSE_daily
+
+Ans:
+mkdir ~/install/hdfsusecases
+head -1000 ~/hive/data/txns_20181213_NY >> ~/install/hdfsusecases/NYSE_2020_06_20.txt
+
+
+2. Create another new file inside the above directory namely ~/install/hdfsusecases/NYSE_2020_06_21.txt copying
+the line from 1001 to 2000 from an existing file ~/pigdata/NYSE_daily
+
+Ans : 
+sed -n '1001,2000p' ~/hive/data/txns_20181213_NY > ~/install/hdfsusecases/NYSE_2020_06_21.txt
