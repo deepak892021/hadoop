@@ -124,7 +124,7 @@ around and try to achive the result
 Ans:
 hadoop fs -copyToLocal /tmp/hdfsusecases/NYSE_2020_06.txt ~/install/hdfsusecases/tmp.txt
 sed -i '1d' ~/install/hdfsusecases/tmp.txt
-hadoop fs -put ~/install/hdfsusecases/tmp.txt /tmp/hdfsusecases/NYSE_2020_06.txt
+hadoop fs -put -f ~/install/hdfsusecases/tmp.txt /tmp/hdfsusecases/NYSE_2020_06.txt
 rm -rf ~/install/hdfsusecases/tmp.txt
 
 14. Copy the above file /tmp/hdfsusecases/NYSE_2020_06.txt in the name of /tmp/hdfsusecases/NYSE_2020_06_bkp.txt
@@ -155,3 +155,125 @@ drwxr-xr-x	hduser	hadoop	0 B	5/14/2022, 10:35:10 AM	0	0 B	extdata
 -rw-r--r--	hduser	hadoop	200.85 MB	6/30/2022, 1:43:05 PM	1	64 MB	hadoop-2.7.1.tar.gz
 
 
+17. Set the blocksize 128MB (134217728) for the same file generated in step 16 and replace the existing file in HDFS.
+
+Ans:
+hadoop fs -D dfs.block.size=134217728 -put -f /home/hduser/install/hadoop-2.7.1.tar.gz /user/hduser/
+-rw-r--r--	hduser	hadoop	200.85 MB	6/30/2022, 3:06:24 PM	1	128 MB	hadoop-2.7.1.tar.gz
+
+
+18. Set the replication to 3 while writing the file in HDFS
+hadoop fs -D dfs.replication=3 -put /home/hduser/install/hadoop-2.7.1.tar.gz /user/hduser/
+
+Ans:
+hadoop fs -D dfs.replication=3 -put -f /home/hduser/install/hadoop-2.7.1.tar.gz /user/hduser/
+
+Permission	Owner	Group	Size	Last Modified	Replication	Block Size	Name
+drwxr-xr-x	hduser	hadoop	0 B	5/14/2022, 10:35:10 AM	0	0 B	extdata
+-rw-r--r--	hduser	hadoop	200.85 MB	6/30/2022, 3:27:08 PM	3	128 MB	hadoop-2.7.1.tar.gz
+
+
+19. To check the block information (In which datanode block is present,no of blocks,size,replication, etc)
+hadoop fsck - -files -locations -blocks /user/hduser/hadoop-2.7.1.tar.gz
+
+Ans:
+Connecting to namenode via http://localhost:50070/fsck?ugi=hduser&files=1&locations=1&blocks=1&path=%2Fuser%2Fhduser%2Fhadoop-2.7.1.tar.gz
+FSCK started by hduser (auth:SIMPLE) from /127.0.0.1 for path /user/hduser/hadoop-2.7.1.tar.gz at Thu Jun 30 15:31:47 IST 2022
+/user/hduser/hadoop-2.7.1.tar.gz 210606807 bytes, 2 block(s):  Under replicated BP-313103802-127.0.0.1-1649576787971:blk_1073743020_2197. Target Replicas is 3 but found 1 replica(s).
+ Under replicated BP-313103802-127.0.0.1-1649576787971:blk_1073743021_2198. Target Replicas is 3 but found 1 replica(s).
+0. BP-313103802-127.0.0.1-1649576787971:blk_1073743020_2197 len=134217728 repl=1 [DatanodeInfoWithStorage[127.0.0.1:50010,DS-efd12c2e-0a33-440e-a2c4-93c985251d32,DISK]]
+1. BP-313103802-127.0.0.1-1649576787971:blk_1073743021_2198 len=76389079 repl=1 [DatanodeInfoWithStorage[127.0.0.1:50010,DS-efd12c2e-0a33-440e-a2c4-93c985251d32,DISK]]
+
+Status: HEALTHY
+ Total size:	210606807 B
+ Total dirs:	0
+ Total files:	1
+ Total symlinks:		0
+ Total blocks (validated):	2 (avg. block size 105303403 B)
+ Minimally replicated blocks:	2 (100.0 %)
+ Over-replicated blocks:	0 (0.0 %)
+ Under-replicated blocks:	2 (100.0 %)
+ Mis-replicated blocks:		0 (0.0 %)
+ Default replication factor:	1
+ Average block replication:	1.0
+ Corrupt blocks:		0
+ Missing replicas:		4 (66.666664 %)
+ Number of data-nodes:		1
+ Number of racks:		1
+FSCK ended at Thu Jun 30 15:31:47 IST 2022 in 33 milliseconds
+
+The filesystem under path '/user/hduser/hadoop-2.7.1.tar.gz' is HEALTHY
+
+
+20. Important Command DistCp (distributed copy) is a tool used for copying data between one Hadoop cluster to another cluster or with in the same cluster using mappers. (Interview Question – how do you copy data from
+production Hadoop cluster to Dev Hadoop cluster) hadoop distcp hdfs://localhost:54310/user/hduser/hadoop-2.7.1.tar.gz hdfs://localhost:54310/user/hduser/hadoop/
+
+Ans:
+[hduser@localhost ~]$ hadoop distcp hdfs://localhost:54310/user/hduser/hadoop-2.7.1.tar.gz hdfs://localhost:54310/user/hduser/hadoop/
+22/06/30 15:38:05 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+22/06/30 15:38:06 INFO tools.DistCp: Input Options: DistCpOptions{atomicCommit=false, syncFolder=false, deleteMissing=false, ignoreFailures=false, maxMaps=20, sslConfigurationFile='null', copyStrategy='uniformsize', sourceFileListing=null, sourcePaths=[hdfs://localhost:54310/user/hduser/hadoop-2.7.1.tar.gz], targetPath=hdfs://localhost:54310/user/hduser/hadoop, targetPathExists=false, preserveRawXattrs=false}
+22/06/30 15:38:07 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+22/06/30 15:38:09 INFO Configuration.deprecation: io.sort.mb is deprecated. Instead, use mapreduce.task.io.sort.mb
+22/06/30 15:38:09 INFO Configuration.deprecation: io.sort.factor is deprecated. Instead, use mapreduce.task.io.sort.factor
+22/06/30 15:38:09 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+22/06/30 15:38:10 INFO mapreduce.JobSubmitter: number of splits:1
+22/06/30 15:38:12 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1656580954290_0001
+22/06/30 15:38:13 INFO impl.YarnClientImpl: Submitted application application_1656580954290_0001
+22/06/30 15:38:13 INFO mapreduce.Job: The url to track the job: http://Inceptez:8088/proxy/application_1656580954290_0001/
+22/06/30 15:38:13 INFO tools.DistCp: DistCp job-id: job_1656580954290_0001
+22/06/30 15:38:13 INFO mapreduce.Job: Running job: job_1656580954290_0001
+22/06/30 15:38:36 INFO mapreduce.Job: Job job_1656580954290_0001 running in uber mode : false
+22/06/30 15:38:36 INFO mapreduce.Job:  map 0% reduce 0%
+22/06/30 15:38:58 INFO mapreduce.Job:  map 100% reduce 0%
+
+22/06/30 15:39:31 INFO mapreduce.Job: Job job_1656580954290_0001 completed successfully
+22/06/30 15:39:32 INFO mapreduce.Job: Counters: 33
+	File System Counters
+		FILE: Number of bytes read=0
+		FILE: Number of bytes written=118468
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=210607182
+		HDFS: Number of bytes written=210606807
+		HDFS: Number of read operations=18
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=4
+	Job Counters 
+		Launched map tasks=1
+		Other local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=40827
+		Total time spent by all reduces in occupied slots (ms)=0
+		Total time spent by all map tasks (ms)=40827
+		Total vcore-seconds taken by all map tasks=40827
+		Total megabyte-seconds taken by all map tasks=41806848
+	Map-Reduce Framework
+		Map input records=1
+		Map output records=0
+		Input split bytes=136
+		Spilled Records=0
+		Failed Shuffles=0
+		Merged Map outputs=0
+		GC time elapsed (ms)=686
+		CPU time spent (ms)=7430
+		Physical memory (bytes) snapshot=152276992
+		Virtual memory (bytes) snapshot=2083688448
+		Total committed heap usage (bytes)=123797504
+	File Input Format Counters 
+		Bytes Read=239
+	File Output Format Counters 
+		Bytes Written=0
+	org.apache.hadoop.tools.mapred.CopyMapper$Counter
+		BYTESCOPIED=210606807
+		BYTESEXPECTED=210606807
+		COPY=1
+
+
+21. choose to overwrite the target files unconditionally even if it exists using upto 2 mappers depends
+hadoop distcp -overwrite hdfs://localhost:54310/user/hduser/hadoop-2.7.1.tar.gz
+hdfs://localhost:54310/user/hduser/hadoop/
+
+
+
+22. To view the content of editlog file, need to convert into xml file using editlog viewer
+hdfs oev -i edits_inprogress_0000000000000009315 -o edittest.xml
