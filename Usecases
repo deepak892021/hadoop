@@ -115,3 +115,6 @@ Ans :
 hadoop fs -cat /tmp/hdfsusecases/NYSE_2020_06.txt | head -20 | tail -10 >> /home/hduser/install/hdfsusecases/NYSE_sampledata1.txt
 22/06/30 00:47:00 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 
+
+
+
