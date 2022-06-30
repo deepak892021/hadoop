@@ -270,10 +270,11 @@ Ans:
 
 
 21. choose to overwrite the target files unconditionally even if it exists using upto 2 mappers depends
-hadoop distcp -overwrite hdfs://localhost:54310/user/hduser/hadoop-2.7.1.tar.gz
-hdfs://localhost:54310/user/hduser/hadoop/
 
+Ans:
+hadoop distcp -overwrite -m 2 hdfs://localhost:54310/user/hduser/hadoop-2.7.1.tar.gz hdfs://localhost:54310/user/hduser/hadoop/
 
 
 22. To view the content of editlog file, need to convert into xml file using editlog viewer
 hdfs oev -i edits_inprogress_0000000000000009315 -o edittest.xml
+
